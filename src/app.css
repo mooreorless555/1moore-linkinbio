@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --main-bg-color: 10, 10, 10;
+    --main-bg-color-solid: #111111;
+    --main-text-color: 255, 255, 255;
+}
+
+.title {
+    color: rgba(var(--main-text-color), 1);
+    transition: all ease 0.8s;
+}
+
+.caption {
+    color: rgba(var(--main-text-color), 0.8);
+    transition: all ease 0.8s;
+}
+
+body {
+    background-color: rgba(var(--main-bg-color), 1);
+    color: white;
+    font-family: "Visby";
+    transition: all ease 0.8s;
+}
+
+@font-face {
+    font-family: "Visby";
+    src: url("/fonts/VisbyCF-Heavy.woff") format("woff");
+    font-weight: bold;
+  }
+
+  @font-face {
+    font-family: "Visby";
+    src: url("/fonts/VisbyCF-Bold.woff") format("woff");
+    font-weight: normal;
+  }
