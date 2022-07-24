@@ -14,7 +14,7 @@
 }
 
 .caption {
-    color: rgba(var(--main-text-color), 0.8);
+    color: rgba(var(--main-text-color), 0.9);
     transition: all ease 0.8s;
 }
 
@@ -23,6 +23,11 @@ body {
     color: white;
     font-family: "Visby";
     transition: all ease 0.8s;
+}
+
+.main {
+    position: relative;
+    overflow-x: hidden !important;
 }
 
 @font-face {

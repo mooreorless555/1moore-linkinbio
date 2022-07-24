@@ -11,14 +11,7 @@ const config = {
 	}),
 
 	kit: {
-		adapter: adapter(),
-		vite: {
-			resolve: {
-				alias: {
-					src: path.resolve('./src')
-				}
-			}
-		}
+		adapter: adapter()
 	}
 };
 

@@ -1,6 +1,19 @@
 import gsap from 'gsap';
 import isDarkColor from 'is-dark-color';
 
+function isDarkColorWithExceptions(color) {
+	const whitelistedColors = ['#F26F23'];
+	if (color === '#F26F23') {
+		return true;
+	}
+
+	return isDarkColor(color);
+}
+
+export function getBackgroundColor() {
+	return getCssVariable('--main-bg-color-solid') || '#111111';
+}
+
 export function changeBackgroundColor(newColor: string) {
 	const oldColor = getCssVariable('--main-bg-color-solid');
 	const rgbColor = hexToRgb(newColor).join(',');
@@ -8,7 +21,7 @@ export function changeBackgroundColor(newColor: string) {
 	changeCssVariable('--main-bg-color', rgbColor);
 	changeCssVariable('--main-bg-color-solid', newColor);
 
-	if (isDarkColor(newColor)) {
+	if (isDarkColorWithExceptions(newColor)) {
 		changeCssVariable('--main-text-color', '255, 255, 255');
 	} else {
 		changeCssVariable('--main-text-color', '0, 0, 0');
