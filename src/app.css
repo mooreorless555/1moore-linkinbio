@@ -13,6 +13,12 @@
     transition: all ease 0.8s;
 }
 
+.my-btn {
+    background-color: rgba(var(--main-text-color), 1);
+    color: rgba(var(--main-bg-color), 1);
+    transition: all ease 0.8s;
+}
+
 .caption {
     color: rgba(var(--main-text-color), 0.9);
     transition: all ease 0.8s;
@@ -23,6 +29,15 @@ body {
     color: white;
     font-family: "Visby";
     transition: all ease 0.8s;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent !important; /* make scrollbar transparent */
+}
+
+::-webkit-scrollbar {
+    display: none;
 }
 
 .main {

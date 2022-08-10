@@ -1,20 +1,19 @@
 <script lang="ts">
-	import Fa from 'svelte-fa/src/fa.svelte';
-	import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
-	import Typewriter, { concurrent } from 'svelte-typewriter';
-	import { onDestroy, onMount } from 'svelte';
-	import { tweened } from 'svelte/motion';
-	import { cubicInOut } from 'svelte/easing';
-	import ElementTransition from 'src/components/ElementTransition.svelte';
-	import gsap from 'gsap';
-	import {
-		toggleIsPlaying,
-		isPlaying,
-		currentSongPreview,
-		currentSongPreviewCaption
-	} from '$lib/stores';
-	import AudioPlayer from 'src/components/AudioPlayer.svelte';
 	import { SongPreviewer, SONGS } from '$lib/song_previewer';
+	import {
+		currentSongPreview,
+		currentSongPreviewCaption,
+		isPlaying,
+		toggleIsPlaying
+	} from '$lib/stores';
+	import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
+	import AudioPlayer from 'src/components/AudioPlayer.svelte';
+	import ElementTransition from 'src/components/ElementTransition.svelte';
+	import { onDestroy, onMount } from 'svelte';
+	import Fa from 'svelte-fa/src/fa.svelte';
+	import Typewriter from 'svelte-typewriter';
+	import { cubicInOut } from 'svelte/easing';
+	import { tweened } from 'svelte/motion';
 
 	const waveformSpeed = tweened(0.3, {
 		duration: 800,
@@ -25,12 +24,26 @@
 	let shouldShowListenButton = true;
 	let songPreviewer = new SongPreviewer();
 
-	const unsubscribe = isPlaying.subscribe((isPlaying) => waveformSpeed.set(isPlaying ? 0.8 : 0.3));
+	const unsubscribe = isPlaying.subscribe((isPlaying) => {
+		handleSongPlayer(isPlaying);
+	});
+
+	function handleSongPlayer(isPlaying) {
+		waveformSpeed.set(isPlaying ? 0.8 : 0.3);
+		if (isPlaying) {
+			songPreviewer.playFromBeginning();
+			currentSongPreview.set(SONGS[0]);
+			waveformSpeed.set(0.8);
+		} else {
+			songPreviewer.stop();
+			waveformSpeed.set(0.3);
+		}
+	}
 
 	onMount(async () => {
 		const module = await import('@lottiefiles/svelte-lottie-player');
 		LottiePlayer = module.LottiePlayer;
-		handleSongPreview();
+		handleSongPlayer(isPlaying);
 	});
 
 	onDestroy(unsubscribe);
@@ -44,17 +57,7 @@
 	}
 
 	function handleSongPreview() {
-		if (!$isPlaying) {
-			isPlaying.set(true);
-			songPreviewer.playFromBeginning();
-			currentSongPreview.set(SONGS[0]);
-			console.log($currentSongPreview);
-			waveformSpeed.set(0.8);
-		} else {
-			isPlaying.set(false);
-			songPreviewer.stop();
-			waveformSpeed.set(0.3);
-		}
+		toggleIsPlaying();
 	}
 </script>
 
@@ -88,7 +91,7 @@
 					</div>
 				</button>
 				{#if LottiePlayer}
-					<div class="waveform-container">
+					<div class="waveform-container" style="overflow: hidden;">
 						<LottiePlayer
 							src="https://assets7.lottiefiles.com/packages/lf20_4tyanb7k.json"
 							background="transparent"
@@ -105,9 +108,16 @@
 	{#each SONGS as song}
 		<AudioPlayer id={song.name} src={song.audioFileUrl} />
 	{/each}
-	<Typewriter interval={[30, 40, 50]}>
-		<p class="mt-6 caption text-2xl">{$currentSongPreviewCaption}</p>
-	</Typewriter>
+	{#if $isPlaying}
+		<Typewriter interval={[30, 40, 50]}>
+			<p class="mt-6 caption text-2xl">{$currentSongPreviewCaption}</p>
+		</Typewriter>
+	{/if}
+	{#if !$isPlaying}
+		<Typewriter interval={[30, 40, 50]}>
+			<p class="mt-6 caption text-2xl">I appreciate the listen!</p>
+		</Typewriter>
+	{/if}
 </div>
 
 <style>

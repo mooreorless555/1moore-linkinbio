@@ -1,14 +1,11 @@
 <script>
-	import Fa from 'svelte-fa/src/fa.svelte';
-	import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
+	import { isPlaying, toggleIsPlaying } from '$lib/stores';
+	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
 	import Typewriter from 'svelte-typewriter';
-	import { onDestroy, onMount } from 'svelte';
-	import { tweened } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
-	import ElementTransition from 'src/components/ElementTransition.svelte';
-	import gsap from 'gsap';
-	import PreviewPage from './PreviewPage.svelte';
-	import { toggleIsPlaying, isPlaying } from '$lib/stores';
+	import { tweened } from 'svelte/motion';
+
+	const dispatch = createEventDispatcher();
 
 	const waveformSpeed = tweened(0.3, {
 		duration: 800,
@@ -17,7 +14,6 @@
 
 	let LottiePlayer;
 	let shouldShowListenButton = false;
-	let clickedListenButton = false;
 
 	const unsubscribe = isPlaying.subscribe((isPlaying) => waveformSpeed.set(isPlaying ? 0.8 : 0.3));
 
@@ -37,7 +33,8 @@
 	}
 
 	function handlePlayStop() {
-		clickedListenButton = true;
+		dispatch('listenBtnClicked');
+		toggleIsPlaying();
 	}
 
 	function showListenButton() {
@@ -47,27 +44,22 @@
 
 <div class="container px-6 py-16 mx-auto h-screen" style="z-index: 99;">
 	<div class="max-w-lg mx-auto">
-		<Typewriter delay={100} interval={[30, 40, 50]}>
+		<Typewriter delay={100} interval={[30, 40, 50]} mode={'cascade'} on:done={showListenButton}>
 			<h1 class="text-6xl title font-bold">Hi, I'm 1Moore.</h1>
+			<p class="mt-6 caption text-2xl">
+				I'm a music producer and software engineer from Chicago, IL.
+			</p>
+			<p class="mt-6 caption text-2xl">Thank YOU for being interested, or at least curious.</p>
+			<p class="mt-6 caption text-2xl">
+				This is my link in bio site. Just scroll down for the links!
+			</p>
+			<!-- <p class="mt-6 caption text-2xl">
+				ORRR you can also tap below to preview some of my tracks right here on this site, see if
+				it's your vibe.
+			</p> -->
 		</Typewriter>
-		<ElementTransition>
-			<Typewriter delay={2000} interval={[30, 40, 50]}>
-				<p class="mt-6 caption text-2xl">
-					I'm a music producer and software engineer from Chicago, IL.
-				</p>
-			</Typewriter>
-			<Typewriter delay={4000} interval={[30, 40, 50]}>
-				<p class="mt-6 caption text-2xl">Welcome to my music and socials site!</p>
-			</Typewriter>
-			<Typewriter delay={6000} interval={[30, 40, 50]} on:done={showListenButton}>
-				<p class="mt-6 caption text-2xl">
-					Tap below to preview some of my tracks, see if it's your vibe.
-				</p>
-			</Typewriter>
-		</ElementTransition>
-
 		<div class="spacer mt-20 text-end" />
-		{#if shouldShowListenButton}
+		<!-- {#if shouldShowListenButton}
 			<ElementTransition>
 				<button
 					on:click={handlePlayStop}
@@ -80,7 +72,7 @@
 					</div>
 				</button>
 				{#if LottiePlayer}
-					<div class="waveform-container">
+					<div class="waveform-container" style="overflow: hidden;">
 						<LottiePlayer
 							src="https://assets7.lottiefiles.com/packages/lf20_4tyanb7k.json"
 							background="transparent"
@@ -92,17 +84,12 @@
 					</div>
 				{/if}
 			</ElementTransition>
-			<Typewriter delay={3500} interval={[30, 40, 50]} on:done={showListenButton}>
-				<p class="mt-6 caption text-xl">Or keep scrolling for my social links.</p>
+			<Typewriter delay={7000} interval={[30, 40, 50]} on:done={showListenButton}>
+				<p class="mt-6 caption text-xl">Up to you.</p>
 			</Typewriter>
-		{/if}
+		{/if} -->
 	</div>
 </div>
-{#if clickedListenButton}
-	<ElementTransition>
-		<PreviewPage />
-	</ElementTransition>
-{/if}
 
 <style>
 	.waveform-container {
