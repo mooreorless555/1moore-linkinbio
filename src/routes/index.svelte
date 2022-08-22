@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getSectionData } from '$lib/util';
+	import { getSectionData, registerUserForPush } from '$lib/util';
 
 	import gsap from 'gsap/dist/gsap';
 	import Section from 'src/components/Section.svelte';
@@ -23,9 +23,10 @@
 	let shouldShowPreviewPage = false;
 	let targetSectionId = '';
 
-	onMount(() => {
+	onMount(async () => {
 		gsap.from('.background-image-container', { opacity: 0, delay: 8, duration: 2 });
 		targetSectionId = window.location.hash.replace('#', '');
+
 		// isPlaying.subscribe((isPlaying) => {
 		// 	if (isPlaying) {
 		// 		console.log('IS PLAYING');

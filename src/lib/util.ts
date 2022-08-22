@@ -58,6 +58,20 @@ function hexToRgb(hex) {
 }
 
 export async function getSectionData() {
-	const res = await axios.get('https://1mooretrack-api.glitch.me/data');
+	const res = await axios.get('https://clever-grammar-359102.uc.r.appspot.com//data');
 	return res.data;
+}
+
+export async function registerUserForPush(gravitec) {
+	gravitec.push(['init', { autoRegister: false }]);
+	gravitec.push([
+		'registerUserForPush',
+		function (success) {
+			if (success) {
+				alert('success!');
+			} else {
+				alert('Fail');
+			}
+		}
+	]);
 }
