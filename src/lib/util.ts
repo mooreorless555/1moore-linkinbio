@@ -1,6 +1,7 @@
 import axios from 'axios';
 import gsap from 'gsap';
 import isDarkColor from 'is-dark-color';
+import * as animateScroll from 'svelte-scrollto';
 
 function isDarkColorWithExceptions(color) {
 	const whitelistedColors = ['#F26F23'];
@@ -62,16 +63,17 @@ export async function getSectionData() {
 	return res.data;
 }
 
-export async function registerUserForPush(gravitec) {
-	gravitec.push(['init', { autoRegister: false }]);
-	gravitec.push([
-		'registerUserForPush',
-		function (success) {
-			if (success) {
-				alert('success!');
-			} else {
-				alert('Fail');
-			}
-		}
-	]);
+export async function addPhoneNumber(formattedNumber: string) {
+	const res = await axios.get('https://clever-grammar-359102.uc.r.appspot.com//add-number/' + formattedNumber);
+	return res.data;
+}
+
+
+
+export function scrollTo(elementId) {
+	animateScroll.scrollTo({
+		container: '.main',
+		duration: 2000,
+		element: '#' + elementId
+	});
 }

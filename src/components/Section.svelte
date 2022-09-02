@@ -13,7 +13,7 @@
 	let initialBackgroundColor = '#111111';
 
 	const options = {
-		threshold: 0.5
+		threshold: 0.45
 	};
 
 	function updateBackgroundColor() {
@@ -30,8 +30,8 @@
 
 <!-- <SwipeItem allow_dynamic_height={true} on:swipe_item_height_change={heightChanged}> -->
 <div use:inview={options} on:enter={updateBackgroundColor} on:leave={resetBackgroundColor}>
-	<section>
-		<slot />
-	</section>
+	<!-- <section> -->
+	<slot />
+	<!-- </section> -->
 </div>
 <!-- </SwipeItem> -->

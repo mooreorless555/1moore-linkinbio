@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { getSectionData, registerUserForPush } from '$lib/util';
+	import { getSectionData } from '$lib/util';
 
 	import gsap from 'gsap/dist/gsap';
 	import Section from 'src/components/Section.svelte';
 	import GenericPage from 'src/pages/GenericPage.svelte';
 	import GreetingPage from 'src/pages/GreetingPage.svelte';
+	import PhoneNumberPage from 'src/pages/PhoneNumberPage.svelte';
 	import { onMount } from 'svelte';
 	import * as animateScroll from 'svelte-scrollto';
 
@@ -22,6 +23,7 @@
 	let clickedListenButton = false;
 	let shouldShowPreviewPage = false;
 	let targetSectionId = '';
+	let sections;
 
 	onMount(async () => {
 		gsap.from('.background-image-container', { opacity: 0, delay: 8, duration: 2 });
@@ -55,9 +57,11 @@
 		clickedListenButton = true;
 	}
 
-	const promise = getSectionData();
+	getSectionData().then((sectionsResponse) => {
+		sections = sectionsResponse;
+	});
 
-	$: if (targetSectionId) {
+	$: if (targetSectionId && sections) {
 		setTimeout(() => scrollTo(targetSectionId), 800);
 	}
 </script>
@@ -69,7 +73,7 @@
 		</div>
 		<GreetingPage on:listenBtnClicked={handleListenBtnClicked} />
 	</Section>
-	{#await promise then sections}
+	{#if sections}
 		<Section color={sections[0].color}>
 			<GenericPage
 				id={sections[0].id}
@@ -79,6 +83,9 @@
 				buttonUrl={sections[0].buttonUrl}
 				datePosted={sections[0].datePosted}
 			/>
+		</Section>
+		<Section color={'#f1c40f'}>
+			<PhoneNumberPage id="phone-number" />
 		</Section>
 		<Section color={'#1DB954'}>
 			<GenericPage
@@ -118,7 +125,7 @@
 				/>
 			</Section>
 		{/each}
-	{/await}
+	{/if}
 </div>
 
 <style>
