@@ -69,7 +69,16 @@
 		</div>
 		<GreetingPage on:listenBtnClicked={handleListenBtnClicked} />
 	</Section>
-	{#await promise then sections}
+	{#await promise}
+		<Section color={'#222222'}>
+			<GenericPage
+				id={'loading'}
+				title="Loading..."
+				description="The rest of the site is loading now. Please give it a sec."
+				hasButton={false}
+			/>
+		</Section>
+	{:then sections}
 		<Section color={sections[0].color}>
 			<GenericPage
 				id={sections[0].id}
@@ -118,6 +127,15 @@
 				/>
 			</Section>
 		{/each}
+		<Section color={'#ffffff'}>
+			<GenericPage
+				id="end"
+				title="That's all the links I got for now!"
+				description="Thanks for taking a look at who I am and what I do."
+				buttonText="Scroll back to top"
+				buttonFn={() => scrollTo('top')}
+			/>
+		</Section>
 	{/await}
 </div>
 

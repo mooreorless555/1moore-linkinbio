@@ -42,7 +42,7 @@
 	}
 </script>
 
-<div class="container px-6 py-16 mx-auto h-screen" style="z-index: 99;">
+<div id="top" class="container px-6 py-16 mx-auto h-screen" style="z-index: 99;">
 	<div class="max-w-lg mx-auto">
 		<Typewriter delay={100} interval={[30, 40, 50]} mode={'cascade'} on:done={showListenButton}>
 			<h1 class="text-6xl title font-bold">Hi, I'm 1Moore.</h1>
