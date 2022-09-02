@@ -19,6 +19,10 @@
     transition: all ease 0.8s;
 }
 
+.my-btn:disabled {
+    background-color: rgba(var(--main-text-color), 0.3);
+}
+
 .caption {
     color: rgba(var(--main-text-color), 0.9);
     transition: all ease 0.8s;
