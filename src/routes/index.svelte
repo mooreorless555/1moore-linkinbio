@@ -61,6 +61,10 @@
 		sections = sectionsResponse;
 	});
 
+	$: if (targetSectionId) {
+		setTimeout(() => scrollTo('loading'), 300);
+	}
+
 	$: if (targetSectionId && sections) {
 		setTimeout(() => scrollTo(targetSectionId), 800);
 	}
@@ -100,15 +104,23 @@
 		<Section color={'#1DB954'}>
 			<GenericPage
 				title="Check out my Spotify."
-				description="I think you'll find something for your next summer playlist."
+				description="I think you'll find something for your next fall playlist."
 				buttonText="Go to Artist Page"
 				buttonUrl="https://open.spotify.com/artist/19LpFPTPsckDnlqFK2UPWw"
 			/>
 		</Section>
+		<Section color={'#5B23E1'}>
+			<GenericPage
+				title="Hit up my Audius for it all."
+				description="All my remixes, bootlegs and tracks I can't legally upload to Spotify live here."
+				buttonText="Visit my Audius"
+				buttonUrl="https://audius.co/moore"
+			/>
+		</Section>
 		<Section color={'#F26F23'}>
 			<GenericPage
-				title="Hit me up on SoundCloud."
-				description="I post remixes/bootlegs and other tracks I can't legally upload to Spotify. RIP, lol."
+				title="I also have a SoundCloud."
+				description="Though I don't know for how long honestly since my remixes keep getting taken down."
 				buttonText="Visit my SoundCloud"
 				buttonUrl="https://soundcloud.com/1mooretrack"
 			/>
