@@ -1,12 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 
-	import { addPhoneNumber } from '$lib/util';
-	import * as GoogleLibPhoneNumber from 'google-libphonenumber';
-
-	const phoneUtil = GoogleLibPhoneNumber.PhoneNumberUtil.getInstance();
-	const PNF = GoogleLibPhoneNumber.PhoneNumberFormat;
-	const formatter = new GoogleLibPhoneNumber.AsYouTypeFormatter('US');
+	import { addPhoneNumber, formatPhoneNumber, isValidNumber } from '$lib/util';
 
 	export let id = 'section';
 	let pageState = 0;
@@ -44,18 +39,6 @@
 		} else if (pageState === 0) {
 			pageState = 1;
 		}
-	}
-
-	function isValidNumber(phoneNumber) {
-		try {
-			return phoneUtil.isValidNumber(phoneUtil.parseAndKeepRawInput(phoneNumber, 'US'));
-		} catch (e) {
-			return false;
-		}
-	}
-
-	function formatPhoneNumber(phoneNumber) {
-		return phoneUtil.format(phoneUtil.parse(phoneNumber, 'US'), PNF.E164);
 	}
 
 	$: if (isValidNumber(phoneNumber)) {

@@ -2,6 +2,7 @@ import axios from 'axios';
 import gsap from 'gsap';
 import isDarkColor from 'is-dark-color';
 import * as animateScroll from 'svelte-scrollto';
+import { parsePhoneNumber, isValidPhoneNumber } from 'libphonenumber-js';
 
 function isDarkColorWithExceptions(color) {
 	const whitelistedColors = ['#F26F23'];
@@ -25,8 +26,12 @@ export function changeBackgroundColor(newColor: string) {
 
 	if (isDarkColorWithExceptions(newColor)) {
 		changeCssVariable('--main-text-color', '255, 255, 255');
+		changeCssVariable('--main-invert', '1');
+		// changeCssVariable('--main-fill', '#ffffff');
 	} else {
 		changeCssVariable('--main-text-color', '0, 0, 0');
+		changeCssVariable('--main-invert', '0');
+		// changeCssVariable('--main-fill', '#000000');
 	}
 
 	gsap.fromTo(
@@ -64,11 +69,25 @@ export async function getSectionData() {
 }
 
 export async function addPhoneNumber(formattedNumber: string) {
-	const res = await axios.get('https://clever-grammar-359102.uc.r.appspot.com//add-number/' + formattedNumber);
+	const res = await axios.get(
+		'https://clever-grammar-359102.uc.r.appspot.com//add-number/' + formattedNumber
+	);
 	return res.data;
 }
 
+export function isValidNumber(phoneNumber) {
+	try {
+		return isValidPhoneNumber(phoneNumber, 'US');
+	} catch (e) {
+		return false;
+	}
+}
 
+export function formatPhoneNumber(phoneNumber) {
+	// const phoneUtil = GoogleLibPhoneNumber.PhoneNumberUtil.getInstance();
+	// const PNF = GoogleLibPhoneNumber.PhoneNumberFormat;
+	return parsePhoneNumber(phoneNumber, 'US').getURI().replace('tel:', '');
+}
 
 export function scrollTo(elementId) {
 	animateScroll.scrollTo({

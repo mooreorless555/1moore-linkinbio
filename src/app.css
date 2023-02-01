@@ -6,10 +6,18 @@
     --main-bg-color: 10, 10, 10;
     --main-bg-color-solid: #111111;
     --main-text-color: 255, 255, 255;
+    --main-invert: 1;
 }
 
 .title {
     color: rgba(var(--main-text-color), 1);
+    transition: all ease 0.8s;
+}
+
+.title-img {
+    filter: grayscale(100%);
+    filter: brightness(0) invert(var(--main-invert));
+    -webkit-filter: brightness(0) invert(var(--main-invert));
     transition: all ease 0.8s;
 }
 
@@ -47,6 +55,11 @@ body {
 .main {
     position: relative;
     overflow-x: hidden !important;
+}
+
+.svg {
+    fill: rgb(var(--main-text-color));
+    transition: all ease 0.8s;
 }
 
 @font-face {

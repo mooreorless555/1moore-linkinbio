@@ -3,16 +3,21 @@
 
 	import gsap from 'gsap/dist/gsap';
 	import Section from 'src/components/Section.svelte';
+	import Snowflakes from 'src/components/Snowflakes.svelte';
 	import GenericPage from 'src/pages/GenericPage.svelte';
 	import GreetingPage from 'src/pages/GreetingPage.svelte';
 	import PhoneNumberPage from 'src/pages/PhoneNumberPage.svelte';
 	import { onMount } from 'svelte';
 	import * as animateScroll from 'svelte-scrollto';
 
+	export let data;
+
+	let y = 0;
+
 	function scrollTo(elementId) {
 		animateScroll.scrollTo({
 			container: '.main',
-			duration: 3000,
+			duration: 1000,
 			element: '#' + elementId
 		});
 	}
@@ -22,10 +27,12 @@
 
 	let clickedListenButton = false;
 	let shouldShowPreviewPage = false;
+	let shouldShowPresavedSection = false;
 	let targetSectionId = '';
-	let sections;
+	let sections: Partial<GenericPage> = [];
 
 	onMount(async () => {
+		sections = await getSectionData();
 		gsap.from('.background-image-container', { opacity: 0, delay: 8, duration: 2 });
 		targetSectionId = window.location.hash.replace('#', '');
 
@@ -57,27 +64,59 @@
 		clickedListenButton = true;
 	}
 
-	getSectionData().then((sectionsResponse) => {
-		sections = sectionsResponse;
-	});
-
 	$: if (targetSectionId) {
-		setTimeout(() => scrollTo('loading'), 300);
+		if (targetSectionId === 'presave-success') {
+			shouldShowPresavedSection = true;
+		}
+		// setTimeout(() => scrollTo('loading'), 300);
 	}
 
 	$: if (targetSectionId && sections) {
-		setTimeout(() => scrollTo(targetSectionId), 800);
+		setTimeout(() => scrollTo(targetSectionId), 1000);
 	}
 </script>
 
+<!-- <div class="absolute" style="top: 0; left: 0; width: 30px; height: {y}px; background: red" /> -->
+<div class="absolute opacity-30">
+	<Snowflakes />
+</div>
 <div class="scrollbar main" style="height: 100vh;">
 	<Section color={'#111111'}>
 		<div class="background-image-container">
-			<img src="/images/1moore_profile_pic.png" class="profile-pic" alt="1Moore Profile Pic" />
+			<!-- <img src="/images/1moore_profile_pic.png" class="profile-pic" alt="1Moore Profile Pic" /> -->
 		</div>
 		<GreetingPage on:listenBtnClicked={handleListenBtnClicked} />
 	</Section>
-	{#if !sections}
+	{#if shouldShowPresavedSection}
+		<Section color={'#1DB954'}>
+			<GenericPage
+				id="presave-success"
+				title="Presaved!"
+				description="Thank you so much for being interested in my sound. I hope you like this one."
+				buttonText="Check out the rest of my site"
+				buttonFn={() => {
+					scrollTo('top');
+					shouldShowPresavedSection = false;
+				}}
+			/>
+		</Section>
+	{/if}
+	<Section color={'#111111'}>
+		<GenericPage id={'my-music'} title="My music at a glance." description="" hasButton={false}>
+			<iframe
+				title="1Moore Spotify Playlist"
+				style="border-radius:12px"
+				src="https://open.spotify.com/embed/playlist/62YiKnNiMccoOJRvLMsdgE?utm_source=generator&theme=0"
+				width="80%"
+				height="58%"
+				frameBorder="0"
+				allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+				loading="lazy"
+			/>
+			<div class="animate-bounce mt-4">There's still more below; keep scrolling!</div>
+		</GenericPage>
+	</Section>
+	{#if !sections.length}
 		<Section color={'#222222'}>
 			<GenericPage
 				id={'loading'}
@@ -87,7 +126,7 @@
 			/>
 		</Section>
 	{/if}
-	{#if sections}
+	{#if sections.length}
 		<Section color={sections[0].color}>
 			<GenericPage
 				id={sections[0].id}
@@ -96,21 +135,24 @@
 				buttonText={sections[0].buttonText}
 				buttonUrl={sections[0].buttonUrl}
 				datePosted={sections[0].datePosted}
+				buttonCaption={sections[0].buttonCaption}
+			/>
+		</Section>
+		<Section color={'#1DB954'}>
+			<GenericPage
+				id="spotify"
+				title="Check out my Spotify."
+				description="I think you'll find something for your next winter playlist."
+				buttonText="Go to Artist Page"
+				buttonUrl="https://open.spotify.com/artist/19LpFPTPsckDnlqFK2UPWw"
 			/>
 		</Section>
 		<Section color={'#f1c40f'}>
 			<PhoneNumberPage id="phone-number" />
 		</Section>
-		<Section color={'#1DB954'}>
-			<GenericPage
-				title="Check out my Spotify."
-				description="I think you'll find something for your next fall playlist."
-				buttonText="Go to Artist Page"
-				buttonUrl="https://open.spotify.com/artist/19LpFPTPsckDnlqFK2UPWw"
-			/>
-		</Section>
 		<Section color={'#5B23E1'}>
 			<GenericPage
+				id="audius"
 				title="Hit up my Audius for it all."
 				description="All my remixes, bootlegs and tracks I can't legally upload to Spotify live here."
 				buttonText="Visit my Audius"
@@ -144,6 +186,7 @@
 					buttonText={section.buttonText}
 					buttonUrl={section.buttonUrl}
 					datePosted={section.datePosted}
+					buttonCaption={section.buttonCaption}
 				/>
 			</Section>
 		{/each}
@@ -161,7 +204,7 @@
 
 <style>
 	.background-image {
-		opacity: 0.01;
+		opacity: 0;
 		transform: translateX(20%) translateY(-100%) scale(2) rotateZ(30deg);
 	}
 

@@ -3,6 +3,7 @@
 	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
 	import Typewriter from 'svelte-typewriter';
 	import { cubicInOut } from 'svelte/easing';
+	import { fade } from 'svelte/transition';
 	import { tweened } from 'svelte/motion';
 
 	const dispatch = createEventDispatcher();
@@ -44,21 +45,32 @@
 
 <div id="top" class="container px-6 py-16 mx-auto h-screen" style="z-index: 99;">
 	<div class="max-w-lg mx-auto">
-		<Typewriter delay={100} interval={[30, 40, 50]} mode={'cascade'} on:done={showListenButton}>
-			<h1 class="text-6xl title font-bold">Hi, I'm 1Moore.</h1>
+		<Typewriter delay={40} interval={[30, 40, 50]} mode={'cascade'} on:done={showListenButton}>
+			<h1 class="text-6xl title font-bold">Hi, I'm 1Moore!</h1>
 			<p class="mt-6 caption text-2xl">
 				I'm a music producer and software engineer from Chicago, IL.
 			</p>
 			<p class="mt-6 caption text-2xl">Thank YOU for being interested, or at least curious.</p>
-			<p class="mt-6 caption text-2xl">
-				This is my link in bio site. Just scroll down for the links!
-			</p>
+			<p class="mt-6 caption text-2xl">This is my custom link in bio site.</p>
 			<!-- <p class="mt-6 caption text-2xl">
 				ORRR you can also tap below to preview some of my tracks right here on this site, see if
 				it's your vibe.
 			</p> -->
 		</Typewriter>
 		<div class="spacer mt-20 text-end" />
+		{#if shouldShowListenButton}
+			<div transition:fade style="overflow: hidden; transform: scale(0.5); margin-top: -100px;">
+				{#if LottiePlayer}
+					<LottiePlayer
+						src="lottie/scroll_down.json"
+						background="transparent"
+						loop={true}
+						autoplay={true}
+						style="pointer-events: none;"
+					/>
+				{/if}
+			</div>
+		{/if}
 		<!-- {#if shouldShowListenButton}
 			<ElementTransition>
 				<button
