@@ -2,7 +2,13 @@
 module.exports = {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
-		extend: {}
+		extend: {
+			colors: {
+				spotify: {
+					100: '#1DB954'
+				}
+			}
+		}
 	},
 	plugins: []
 };

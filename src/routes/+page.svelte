@@ -80,7 +80,7 @@
 <div class="absolute opacity-30">
 	<Snowflakes />
 </div>
-<div class="scrollbar main" style="height: 100vh;">
+<div class="scrollbar main" style="height: 100vh; padding-top: 60px;">
 	<Section color={'#111111'}>
 		<div class="background-image-container">
 			<!-- <img src="/images/1moore_profile_pic.png" class="profile-pic" alt="1Moore Profile Pic" /> -->

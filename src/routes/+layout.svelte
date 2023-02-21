@@ -52,7 +52,7 @@
 			</p>
 		{/if} -->
 	</nav>
-	<div style="padding-top: 60px">
+	<div style="padding-top: 0px; overflow: hidden;">
 		<slot />
 	</div>
 </PageTransition>
